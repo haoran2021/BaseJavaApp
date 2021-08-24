@@ -53,6 +53,9 @@ public class RouteProcessor extends AbstractProcessor {
             String path = route.path();
             String group = route.group();
             String newClassName = path + "$$Hx";
+            /**
+             *  "MainActivity ! \n";
+             */
 
             StringBuilder builder = new StringBuilder()
                     .append("package com.hongx.processor.auto;\n\n")
@@ -61,7 +64,7 @@ public class RouteProcessor extends AbstractProcessor {
                     .append(" {\n\n") // open class
                     .append("\tpublic String getMessage() {\n") // open method
                     .append("\t\treturn \"");
-            builder.append(path).append(group).append(" !\\n");
+            builder.append(path).append(group).append("!");
             builder.append("\";\n") // end return
                     .append("\t}\n") // close method
                     .append("}\n"); // close class
@@ -76,7 +79,7 @@ public class RouteProcessor extends AbstractProcessor {
             }
 
             if (!set.isEmpty()) {
-                createRoute(mFiler,newClassName,path);
+                createRoute(mFiler,newClassName,path+group);
                 createTest();
                 createInfe();
                 createDataBean();
@@ -94,8 +97,9 @@ public class RouteProcessor extends AbstractProcessor {
         MethodSpec main = MethodSpec.methodBuilder("getMessage")      //主方法的名称
                 .addModifiers(Modifier.PUBLIC)
                 .returns(String.class)
-                .addStatement("return $S",path)
+                .addStatement("return $S",path+"!")
                 .build();
+
         //	使用 TypeSpec 生成 HelloWorld 类
         TypeSpec typeSpec = TypeSpec.classBuilder(className)   //主类的名称
                 .addModifiers(Modifier.PUBLIC, Modifier.FINAL)
